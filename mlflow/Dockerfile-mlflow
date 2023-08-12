@@ -1,0 +1,25 @@
+# Use the official Python image as the base image
+FROM python:3.8-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y postgresql-client
+
+# Set the working directory inside the container
+WORKDIR /tmp/app
+
+# Copy your project files to the working directory
+COPY . .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose the MLflow UI port
+EXPOSE 5000
+
+# Command to run MLflow server
+CMD mlflow server \
+    --host 0.0.0.0 \
+    --port 5000 \
+    --backend-store-uri $MLFLOW_TRACKING_DB_URI \
+    --default-artifact-root $MLFLOW_S3_BUCKET
+
