@@ -1,0 +1,44 @@
+# FROM python:3.8-slim
+
+# # Set the working directory
+# WORKDIR /app
+
+# # Copy the requirements file into the container at /app
+# COPY requirements.txt /app/
+
+# # Install any needed packages specified in requirements.txt
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# # Expose the Prefect UI port
+# EXPOSE 4200
+# EXPOSE 8080
+
+# # Set the command to start the Prefect Orion UI
+# CMD printenv && \
+#     prefect config set PREFECT_API_URL="http://18.214.23.236:4200/api" && \
+#     prefect orion start --host 0.0.0.0
+
+# # Expose the Prefect UI port
+# EXPOSE 4200
+# EXPOSE 8080
+
+
+FROM python:3.8-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file into the container at /app
+COPY requirements.txt /app/
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose the Prefect UI port
+EXPOSE 4200
+EXPOSE 8080
+
+# Set the command to start the Prefect Orion UI
+RUN echo "Printing environment variables:" && printenv && \
+    prefect config set PREFECT_API_URL="http://44.204.99.131:4200/api"
+CMD ["prefect", "orion", "start", "--host", "0.0.0.0"]

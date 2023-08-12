@@ -1,0 +1,51 @@
+# Set the base image
+FROM python:3.8-slim
+
+# Set the timezone (Add these lines)
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Set the working directory
+WORKDIR /app
+
+# Copy only the necessary files
+COPY requirements.txt .
+COPY prefect_setup.sh .
+
+
+# Install system dependencies and Python packages
+RUN apt update && apt install uuid -y
+
+RUN pip install -r requirements.txt
+
+
+RUN prefect config set PREFECT_ORION_UI_API_URL="http://prefect_server:4200/api"
+RUN prefect config set PREFECT_API_URL="http://prefect_server:4200/api"
+
+
+ENTRYPOINT  sleep 15 && sh prefect_setup.sh && prefect agent start work_queue_1
+
+# Use the base image
+# FROM python:3.8-slim
+
+# # Set the timezone (Add these lines)
+# ENV TZ=UTC
+# RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# # Set the working directory
+# WORKDIR /app
+
+# # Copy only the necessary files
+# COPY requirements.txt .
+
+# # Install system dependencies and Python packages
+# RUN apt update && apt install uuid -y
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# # Sleep for 15 seconds before starting the Prefect agent
+# CMD ["sh", "-c", "sleep 15 && prefect agent start -q WORK_QUEUE"]
+
+# Start the Prefect agent
+# ENTRYPOINT sleep 15 && sh prefect_setup.sh && prefect agent start work_queue.
+# Set Prefect configuration
+# CMD [ "sleep 15" "prefect", "agent", "start", "-q", "YOUR_WORK_QUEUE_NAME" ]
