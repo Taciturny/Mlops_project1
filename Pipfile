@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+scikit-learn = "==1.2.2"
+flask = "*"
+mlflow = "==2.3.1"
+prefect = "==2.10.15"
+boto3 = "*"
+psycopg2-binary = "*"
+optuna = "*"
+pydantic = "==1.10.2"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
