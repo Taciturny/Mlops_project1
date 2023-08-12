@@ -1,0 +1,131 @@
+version: '3.7'
+services:
+  mlflow_server:
+    restart: always
+    build:
+      context: ./mlflow
+      dockerfile: Dockerfile-mlflow
+    image: mlflow_server:v1
+    container_name: mlflow_server
+    ports:
+      - 5000:5000
+    env_file:
+      - .env
+    networks:
+      - backend
+    volumes:
+      - mlflow_data:/mlflow
+
+  # Prefect Service
+  prefect_server:
+    restart: always
+    build:
+      context: ./orchestration
+      dockerfile: Dockerfile.prefect_server
+    image: prefect_server:v1
+    container_name: prefect_server
+    ports:
+      - "4200:4200"
+      - "8080:8080"
+    env_file:
+      - .env
+    networks:
+      - backend  
+    volumes:
+      - prefect_data:/root/.prefect    
+
+  # Agent Service
+  agent:
+    restart: always
+    depends_on:
+      - prefect_server
+      - mlflow_server
+    build:
+      context: ./orchestration
+      dockerfile: Dockerfile.prefect_agent
+    image: prefect_agent:v1
+    container_name: "prefect_agent_1"
+    environment:
+      TZ: UTC 
+      REPORT_TIME_WINDOW_MINUTES: 300
+      REPORTS_FOLDER: /app/reports
+    volumes:
+      - prefect_data:/root/.prefect
+      - ./reports:/app/reports
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mlflow_data:
+  prefect_data:
+
+
+
+
+# version: '3.7'
+# services:
+#   mlflow_server:
+#     restart: always
+#     build:
+#       context: ./mlflow
+#       dockerfile: Dockerfile-mlflow
+#     image: mlflow_server:v1
+#     container_name: mlflow_server
+#     ports:
+#       - 5000:5000
+#     env_file:
+#       - .env
+#     networks:
+#       - backend
+#     volumes:
+#       - mlflow_data:/mlflow
+
+#   prefect_server:
+#     build:
+#      context: ./orchestration
+#      dockerfile: Dockerfile.prefect_server
+#     image: prefect_server:v1
+#     restart: always
+#     volumes:
+#       - prefect_data:/root/.prefect 
+#     ports:
+#       - 4200:4200
+#     networks:
+#       - backend
+#     profiles: ["server"]
+
+#   agent:
+#     build:
+#       context: ./orchestration
+#       dockerfile: Dockerfile.prefect_agent
+#     image: prefect_agent:v1
+#     restart: always
+#     depends_on:
+#        - prefect_server
+#        - mlflow_server
+#     environment:
+#       # - PREFECT_API_URL=http://prefect_server:4200/api
+#       TZ: UTC 
+#       REPORT_TIME_WINDOW_MINUTES: 300
+#       REPORTS_FOLDER: /app/reports
+#       # Use PREFECT_API_KEY if connecting the agent to Prefect Cloud
+#       # - PREFECT_API_KEY=YOUR_API_KEY
+#     profiles: ["agent"]
+#     volumes:
+#     - prefect_data:/root/.prefect
+#     - ./reports:/app/reports
+#     networks:
+#       - backend
+
+# networks:
+#   backend:
+#     driver: bridge
+
+# volumes:
+#   mlflow_data:
+#   prefect_data:
+
