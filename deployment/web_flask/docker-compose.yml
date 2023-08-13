@@ -1,0 +1,28 @@
+version: '3'
+services:
+  flask-app:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-flask
+    ports:
+      - "9696:9696"
+    environment:
+      - FLASK_ENV=development
+      - RUN_ID=c7bbdaaf531c46afa8d716eb26dcc0f7
+      - MODEL_URI=s3://{BucketName}/2/7e4d948df63a47eb92a5b2cd3886c913/artifacts/random_forest_model_v1
+      - AWS_ACCESS_KEY_ID=your_actual_access_key_id
+      - AWS_SECRET_ACCESS_KEY=your_actual_secret_access_key
+      - AWS_REGION=your_aws_region
+
+  nginx-server:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - flask-app
