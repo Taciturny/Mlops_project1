@@ -35,7 +35,7 @@ Provide step-by-step instructions for installing any dependencies and setting up
 git clone https://github.com/Taciturny/Mlops_projectdtc.git
 
 # Change to the project directory
-cd your-project
+cd Mlops_projectdtc
 ```
 
 ## Reproducibility Steps
