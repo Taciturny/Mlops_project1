@@ -1,7 +1,7 @@
 # Mlops_projectdtc
 
 
-P# Data Science Prediction
+# Data Science Prediction
 
 ## Problem Statement
 
