@@ -28,8 +28,6 @@ Model performance will be assessed using the Root Mean Squared Error (RMSE).
 
 ## Installation
 
-Provide step-by-step instructions for installing any dependencies and setting up the environment needed to run your predictive model. For example:
-
 ```bash
 # Clone the repository
 git clone https://github.com/Taciturny/Mlops_projectdtc.git
@@ -39,6 +37,7 @@ cd Mlops_projectdtc
 ```
 
 # Project Structure
+```bash
 Mlops_projectdtc/
 │
 ├── aws_infrastructure/        # AWS infrastructure setup
@@ -67,6 +66,7 @@ Mlops_projectdtc/
 │   └── ...
 │
 └── README.md                  # Detailed project documentation and instructions
+```
 
 
 
