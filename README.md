@@ -115,11 +115,31 @@ The artifacts are saved in s3. You can change the Bucket name in infrsatructure/
 ```
 
 ### Step 6 Model Deployment
-Navigate to deployment/web_flask folder and build the docker-compose
+To deploy this application, follow these steps:
+
+1. Navigate to deployment/web_flask folder and build the docker-compose
 ```bash
 sudo docker-compose up --build -d
 ```
 Test the Flask app
 ```bash
 python test.py
+```
+
+Also navigate to deployment/lambda_apigateway folder.
+1. Install AWS SAM CLI. If you haven't already, you can find installation instructions [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html).
+2. Buiid the docker cointainer:
+```bash
+docker build -t ds-salary.v1 .
+```
+3. Run your SAM locally
+```bash
+sam local invoke <MyLambdaFunction> -e event.json --log-file output.log
+```
+4. If the local testing is successful, proceed with the deployment. Provide your S3 bucket name and execute the following command to package the application:
+```bash
+sam package --template-file template.yaml --s3-bucket <your-s3-bucket> --output-template-file packaged-template.yaml
+```
+```bash
+sam deploy --template-file packaged-template.yaml --stack-name <your-stack-name> --capabilities CAPABILITY_IAM
 ```
