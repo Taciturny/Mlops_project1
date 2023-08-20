@@ -38,6 +38,40 @@ git clone https://github.com/Taciturny/Mlops_projectdtc.git
 cd Mlops_projectdtc
 ```
 
+# Project Structure
+Mlops_projectdtc/
+│
+├── aws_infrastructure/        # AWS infrastructure setup
+│   ├── main.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   └── mlflow_setup.sh        # Script to install and configure MLflow
+│
+├── mlflow/                    # MLflow setup on AWS EC2 instance
+│   ├── Dockerfile-mlflow
+│   └── requirements.txt
+│
+├── orchestration/             # Prefect workflows and task definitions
+│   ├── prefect_agent_config
+│   ├── Dockerfile.prefect_agent.py
+│   ├── Dockerfile.prefect_server.py
+│   └── prefect_setup.sh
+│
+├── src/                        # Model training
+│   ├── train_model.py
+│   └── ...
+│
+├── deployment/                 # Model deployment configuration (Docker)
+│   ├── web_flask/
+│   ├── lambda_apigateway_docker/
+│   └── ...
+│
+└── README.md                  # Detailed project documentation and instructions
+
+
+
+
+
 ## Reproducibility Steps
 
 ### Step 1: Configure AWS Environment
@@ -143,7 +177,7 @@ docker build -t ds-salary.v1 .
 ```bash
 sam local invoke MyLambdaFunction -e event.json --log-file output.log
 ```
-4. If the local testing is successful, proceed with the deployment. Provide your S3 bucket name and execute the following command to package the application:
+4. If the local testing is successful, proceed with the deployment. Provide your S3 bucket name and stack name and execute the following command to package the application:
 ```bash
 sam package --template-file template.yaml --s3-bucket <your-s3-bucket> --output-template-file packaged-template.yaml
 ```
