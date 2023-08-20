@@ -6,7 +6,7 @@
 ## Problem Statement
 
 ### Description
-The project addresses the challenge of accurately estimating the salaries of Data Scientists, benefiting both job seekers and employers in the data science field.
+The project addresses the challenge of accurately estimating the salaries of Data Scientists, benefiting both job seekers and employers in the data science field. Here is the dataset [Link](https://www.kaggle.com/datasets/arnabchaki/data-science-salaries-2023)
 
 ### Why it's Important
 Accurate salary estimates promote fairness and transparency in the hiring process, reducing friction in negotiations and enhancing job market efficiency.
@@ -89,15 +89,22 @@ sudo docker-compose up --build -d
 NB: MLFLOW_TRACKING_URI is your EC2_IP
 For Linux/macOS:
 ```bash
-export AWS_ACCESS_KEY_ID=[AWS_ACCESS_KEY_ID]
-export AWS_SECRET_ACCESS_KEY=[AWS_SECRET_ACCESS_KEY]
-export MLFLOW_TRACKING_URI=[MLFLOW_TRACKING_URI]
+    export AWS_ACCESS_KEY_ID=[AWS_ACCESS_KEY_ID]
+    export AWS_SECRET_ACCESS_KEY=[AWS_SECRET_ACCESS_KEY]
+    export MLFLOW_TRACKING_URI=[MLFLOW_TRACKING_URI]
 ```
 For Windows (using Git Bash or VS Code):
 ```bash
-set AWS_ACCESS_KEY_ID=[AWS_ACCESS_KEY_ID]
-set AWS_SECRET_ACCESS_KEY=[AWS_SECRET_ACCESS_KEY]
-set MLFLOW_TRACKING_URI=[MLFLOW_TRACKING_URI]
+    set AWS_ACCESS_KEY_ID=[AWS_ACCESS_KEY_ID]
+    set AWS_SECRET_ACCESS_KEY=[AWS_SECRET_ACCESS_KEY]
+    set MLFLOW_TRACKING_URI=[MLFLOW_TRACKING_URI]
+```
+3. Also set the environment for the RDS (You can change or use the deafult set)
+```bash
+    export MLFLOW_TRACKING_USERNAME=mlflow
+    export MLFLOW_TRACKING_PASSWORD=tacy12345
+    export MLFLOW_TRACKING_DB_TYPE=postgresql
+    export MLFLOW_TRACKING_DB_URI=postgresql://mlflow:tacy12345@my-mlflow-db-instance.c8p9u7rep2a1.us-east-1.rds.amazonaws.com:5432/mydb100
 ```
 
 ### Step 4.  Setup the Prefect Cloud
@@ -106,7 +113,7 @@ set MLFLOW_TRACKING_URI=[MLFLOW_TRACKING_URI]
 2. Create your workspace and generate your API Key [API-Key](https://docs.prefect.io/2.11.4/cloud/users/api-keys/)
 3. Login into prefect on your terminals
 ```bash
-    prefect cloud login -k '<my-api-key>'
+    prefect cloud login -k '<api-key>'
 ```
 ### Step 5: Model Training
 The artifacts are saved in s3. You can change the Bucket name in infrsatructure/main.tf
@@ -134,7 +141,7 @@ docker build -t ds-salary.v1 .
 ```
 3. Run your SAM locally
 ```bash
-sam local invoke <MyLambdaFunction> -e event.json --log-file output.log
+sam local invoke MyLambdaFunction -e event.json --log-file output.log
 ```
 4. If the local testing is successful, proceed with the deployment. Provide your S3 bucket name and execute the following command to package the application:
 ```bash
