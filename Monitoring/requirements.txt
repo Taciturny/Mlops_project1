@@ -1,0 +1,12 @@
+psycopg2
+evidently
+prefect
+tqdm
+pandas
+numpy
+scikit-learn
+requests
+tqdm
+joblib
+jupyter
+psycopg_bianry==3.1.10
