@@ -9,7 +9,7 @@ import io
 import psycopg
 import joblib
 
-from prefect import task, flow
+# from prefect import task, flow
 
 from evidently.report import Report
 from evidently import ColumnMapping
@@ -31,16 +31,11 @@ create table dummy_metrics(
 """
 
 reference_data = pd.read_csv('data/train_data.csv')
-with open('models/pipeline.bin', 'rb') as f_in:
-    pipeline = joblib.load(f_in)
-
 current_data = pd.read_csv('data/test_data.csv')
 
 begin = datetime.datetime(2023, 2, 1, 0, 0)
 num_features = ["work_year", "salary", "remote_ratio"]
 cat_features = ["experience_level", "employment_type", "job_title", "employee_residence", "company_location", "company_size"]
-
-current_data_filtered = current_data[num_features + cat_features]
 column_mapping = ColumnMapping(
     prediction='prediction',
     numerical_features=num_features,
@@ -54,7 +49,7 @@ report = Report(metrics=[
     DatasetMissingValuesMetric()
 ])
 
-@task
+# @task
 def prep_db():
     with psycopg.connect("host=localhost port=5432 user=postgres password=example", autocommit=True) as conn:
         res = conn.execute("SELECT 1 FROM pg_database WHERE datname='test'")
@@ -62,31 +57,40 @@ def prep_db():
             conn.execute("create database test;")
         with psycopg.connect("host=localhost port=5432 dbname=test user=postgres password=example") as conn:
             conn.execute(create_table_statement)
+            conn.commit()
 
-@task
+# @task
 def calculate_metrics_postgresql(curr, i):
+    try:
+        report.run(reference_data=reference_data, current_data=current_data, column_mapping=column_mapping)
+        result = report.as_dict()
 
-    report.run(reference_data=reference_data, current_data=current_data,
-               column_mapping=column_mapping)
+        prediction_drift = result['metrics'][0]['result']['drift_score']
+        num_drifted_columns = result['metrics'][1]['result']['number_of_drifted_columns']
+        share_missing_values = result['metrics'][2]['result']['current']['share_of_missing_values']
 
-    result = report.as_dict()
+        insert_sql = """
+            INSERT INTO dummy_metrics (timestamp, prediction_drift, num_drifted_columns, share_missing_values)
+            VALUES (%s, %s, %s, %s)
+        """
+        values = (begin + datetime.timedelta(i), prediction_drift, num_drifted_columns, share_missing_values)
 
-    prediction_drift = result['metrics'][0]['result']['drift_score']
-    num_drifted_columns = result['metrics'][1]['result']['number_of_drifted_columns']
-    share_missing_values = result['metrics'][2]['result']['current']['share_of_missing_values']
+        curr.execute(insert_sql, values)
+        curr.connection.commit()
 
-    curr.execute(
-        "insert into dummy_metrics(timestamp, prediction_drift, num_drifted_columns, share_missing_values) values (%s, %s, %s, %s)",
-        (begin + datetime.timedelta(i), prediction_drift, num_drifted_columns, share_missing_values)
-    )
+        logging.info("Data inserted successfully")
+
+    except Exception as e:
+        logging.error(f"Error inserting data: {e}")
 
 
-@flow
+
+# @flow
 def batch_monitoring_backfill():
     prep_db()
     last_send = datetime.datetime.now() - datetime.timedelta(seconds=10)
     with psycopg.connect("host=localhost port=5432 dbname=test user=postgres password=example", autocommit=True) as conn:
-        for i in range(0, 27):
+        for i in range(0, 15):
             with conn.cursor() as curr:
                 calculate_metrics_postgresql(curr, i)
 
@@ -97,6 +101,7 @@ def batch_monitoring_backfill():
             while last_send < new_send:
                 last_send = last_send + datetime.timedelta(seconds=10)
             logging.info("data sent")
+            conn.commit()
 
 if __name__ == '__main__':
     batch_monitoring_backfill()
