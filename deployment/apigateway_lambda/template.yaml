@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+
+Resources:
+  MyLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda.lambda_test
+      Runtime: python3.9
+      CodeUri: ./
+      Timeout: 12
+      Events:
+        MyApi:
+          Type: Api
+          Properties:
+            Path: /predict
+            Method: POST
+      Policies:
+        - AmazonS3ReadOnlyAccess
+
+
+Outputs:
+  MyApi:
+    Description: "API Gateway endpoint URL for MyLambdaFunction"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/predict/"
+
