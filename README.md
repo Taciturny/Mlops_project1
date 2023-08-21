@@ -105,14 +105,14 @@ Mlops_projectdtc/
 4. Copy the output and save
 5. Copy Project Files to the EC2 Instance
 # Copy MLflow, orchestration, Docker Compose, and environment configuration files to the EC2 instance
-    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" -r "path_to_files/mlflow" ubuntu@[EC2_IP]:~
-    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" -r "path_to_files/orchestration" ubuntu@[EC2_IP]:~
-    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" "path_to_files/docker-compose.yml" ubuntu@[EC2_IP]:~
-    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" "path_to_files/.env" ubuntu@[EC2_IP]:~
+    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" -r "path_to_files/mlflow" ec2-user@your-ec2-instance:/path/on/ec2/:~
+    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" -r "path_to_files/orchestration" ec2-user@your-ec2-instance:/path/on/ec2/:~
+    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" "path_to_files/docker-compose.yml" ec2-user@your-ec2-instance:/path/on/ec2/:~
+    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" "path_to_files/.env" ec2-user@your-ec2-instance:/path/on/ec2/:~
 
 6.  SSH to the EC2 Instance
 ```bash    
-ssh -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" ubuntu@[EC2_IP]
+ssh -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" ec2-user@your-ec2-instance:/path/on/ec2/
 ```
 7. Run the command to start the mlflow and prefect servers
 ```bash
