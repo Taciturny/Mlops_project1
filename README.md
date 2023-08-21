@@ -1,7 +1,7 @@
 # Mlops_projectdtc
 
 
-# Data Science Prediction
+# Data Science Salary Prediction
 
 ## Problem Statement
 
