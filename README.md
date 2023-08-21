@@ -37,7 +37,6 @@ cd Mlops_projectdtc
 ```
 
 # Project Structure
-# Project Structure
 ```bash
 Mlops_projectdtc/
 │
