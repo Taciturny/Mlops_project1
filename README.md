@@ -37,6 +37,7 @@ cd Mlops_projectdtc
 ```
 
 # Project Structure
+# Project Structure
 ```bash
 Mlops_projectdtc/
 │
@@ -60,14 +61,18 @@ Mlops_projectdtc/
 │   ├── train_model.py
 │   └── ...
 │
-├── deployment/                 # Model deployment configuration (Docker)
+├── deployment/                 # Model deployment configuration 
 │   ├── web_flask/
-│   ├── lambda_apigateway_docker/
+│   ├── apigateway_lambda/
 │   └── ...
-│
+│- monitoring/
+|  |-- baseline_model.ipynb
+|  |-- evidently_metrics.py
+|  
+|-- unit_testing/
+|  |-- test.py
 └── README.md                  # Detailed project documentation and instructions
 ```
-
 
 
 
@@ -167,20 +172,36 @@ Test the Flask app
 python test.py
 ```
 
-Also navigate to deployment/lambda_apigateway folder.
+Also navigate to deployment/apigateway_lambda/ folder.
 1. Install AWS SAM CLI. If you haven't already, you can find installation instructions [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html).
-2. Buiid the docker cointainer:
+2. Buiid and run the docker cointainer:
 ```bash
 docker build -t ds-salary.v1 .
 ```
-3. Run your SAM locally
+3. Build SAM
+```bash
+sam build
+```
+4. Validate SAM
+```bash
+sam validate --lint
+```
+5. Run SAM locally
 ```bash
 sam local invoke MyLambdaFunction -e event.json --log-file output.log
 ```
-4. If the local testing is successful, proceed with the deployment. Provide your S3 bucket name and stack name and execute the following command to package the application:
+6. If the local testing is successful, proceed with the deployment. Provide your S3 bucket name and stack name and execute the following command to package the application:
 ```bash
 sam package --template-file template.yaml --s3-bucket <your-s3-bucket> --output-template-file packaged-template.yaml
 ```
 ```bash
 sam deploy --template-file packaged-template.yaml --stack-name <your-stack-name> --capabilities CAPABILITY_IAM
+```
+7. Navigate to the Api Gateway on the console and get your API ID for the URL endpoint:
+```bash
+curl -X POST -H "Content-Type: application/json" --data "@event.json" https://<API_ID>.execute-api.us-east-1.amazonaws.com/Prod/predict/
+```
+8. Delete the stack after testing:
+```bash
+aws cloudformation delete-stack --stack-name <your-stack-name>
 ```
