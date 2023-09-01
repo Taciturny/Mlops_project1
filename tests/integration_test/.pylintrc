@@ -1,0 +1,18 @@
+[MASTER]
+
+[MESSAGES CONTROL]
+disable =import-error,
+
+[REPORTS]
+
+[MISCELLANEOUS]
+
+[BASIC]
+
+[FORMAT]
+
+[SIMILARITIES]
+
+[TYPECHECK]
+
+[FILES]
