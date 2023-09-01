@@ -37,14 +37,20 @@ def predict_endpoint():
         data = request.get_json()
         if data is None:
             return jsonify({'error': 'Invalid JSON data'}), 400
-        
+
+        if not data:
+            return jsonify({'error': 'Missing data'}), 400
+
+        if 'salary' not in data:
+            return jsonify({'error': 'Missing "salary" field'}), 400
+
         pred = predict(data)
         formatted_pred = round(pred, 2)
 
         run_id = Config.get_run_id()
 
         result = {
-            'salary': formatted_pred,
+            'salary_in_usd': formatted_pred,
             'model_version': run_id
         }
 
@@ -56,6 +62,8 @@ def predict_endpoint():
         app.logger.error(f'Error: {str(e)}')
         app.logger.error(traceback.format_exc())
         return jsonify({'error': 'An internal error occurred'}), 500
+
+
 
 
 if __name__ == "__main__":
