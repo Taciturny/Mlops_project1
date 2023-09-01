@@ -108,12 +108,16 @@ Mlops_projectdtc/
     terraform destroy --auto-approve
 ```
 4. Copy the output and save
+
 5. Copy Project Files to the EC2 Instance
+
  Copy MLflow, orchestration, Docker Compose, and environment configuration files to the EC2 instance
-    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" -r "path_to_files/mlflow" ec2-user@your-ec2-instance:/path/on/ec2/:~
-    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" -r "path_to_files/orchestration" ec2-user@your-ec2-instance:/path/on/ec2/:~
-    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" "path_to_files/docker-compose.yml" ec2-user@your-ec2-instance:/path/on/ec2/:~
-    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" "path_to_files/.env" ec2-user@your-ec2-instance:/path/on/ec2/:~
+ ```bash
+    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" -r "path_to_files/mlflow" ec2-user@your-ec2-instance:/path/on/ec2/
+    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" -r "path_to_files/orchestration" ec2-user@your-ec2-instance:/path/on/ec2/
+    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" "path_to_files/docker-compose.yml" ec2-user@your-ec2-instance:/path/on/ec2/
+    scp -i "path/to/your/Mlops_projectdtc/infrastructure/mlops1.pem" "path_to_files/.env" ec2-user@your-ec2-instance:/path/on/ec2/
+ ```
 
 6.  SSH to the EC2 Instance
 ```bash    
