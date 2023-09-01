@@ -1,6 +1,6 @@
 resource "aws_iam_policy" "mlflow_policy" {
   name        = "MLflow_Policy"
-  description = "IAM policy for MLflow backend with RDS and S3 bucket for tracking and pull images from ECR"
+  description = "IAM policy for MLflow backend with RDS and S3 bucket for tracking and database management"
 
   policy = jsonencode({
     Version : "2012-10-17",
