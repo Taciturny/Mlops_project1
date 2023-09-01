@@ -30,7 +30,7 @@ MODEL_NAME = 'RandomForest_Salary_Prediction_Model'
 mlflow.sklearn.autolog()
 
 # mlflow.set_experiment(EXPERIMENT_NAME) EXPERIMENT_NAME = 'RandomForest_best_model'
-@task(retries=3, retry_delay_seconds=2, name='Experiment setup')
+# @task(retries=3, retry_delay_seconds=2, name='Experiment setup')
 def setup_experiment():
     print("Current Working Directory:", os.getcwd())
     
@@ -46,7 +46,7 @@ def setup_experiment():
     mlflow.sklearn.autolog()
 
 
-@task(retries=3, retry_delay_seconds=2, name='Read Data')
+# @task(retries=3, retry_delay_seconds=2, name='Read Data')
 def load_data(zip_data: str, csv_name: str) -> pd.DataFrame:
     '''
     Load data from a CSV file inside a ZIP file
@@ -64,7 +64,7 @@ def load_data(zip_data: str, csv_name: str) -> pd.DataFrame:
 
 
 
-@task(retries=3,retry_delay_seconds=2, name='Preprocess Data')
+# @task(retries=3,retry_delay_seconds=2, name='Preprocess Data')
 def preprocess(df: pd.DataFrame) -> pd.DataFrame:
     '''
     Preprocess the data, rename categories within columns, and remove outliers.
@@ -91,7 +91,7 @@ def preprocess(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-@task(retries=3,retry_delay_seconds=2, name='Splitting Data')
+# @task(retries=3,retry_delay_seconds=2, name='Splitting Data')
 def split_data(df: pd.DataFrame, target_column: str, test_size=0.2, random_state=42):
     '''
     Split the data into training and testing sets.
@@ -116,7 +116,7 @@ def split_data(df: pd.DataFrame, target_column: str, test_size=0.2, random_state
     return X_train, X_test, y_train, y_test
 
 
-@task(retries=3, retry_delay_seconds=2, name='Model Training')
+# @task(retries=3, retry_delay_seconds=2, name='Model Training')
 def model_train(X_train, X_test, y_train, y_test, max_depth=10):
     '''
     Train the model and log RMSE using MLflow
@@ -162,7 +162,7 @@ def model_train(X_train, X_test, y_train, y_test, max_depth=10):
 
 
 
-@task(retries=3, retry_delay_seconds=2, name='Hyperparameter Tunning')
+# @task(retries=3, retry_delay_seconds=2, name='Hyperparameter Tunning')
 def run_optimization(X_train: pd.DataFrame, X_test: pd.DataFrame,
                      y_train: pd.Series, y_test: pd.Series,
                      num_trials: int) -> None:
@@ -254,7 +254,7 @@ def evaluate_model(pipeline, X_test, y_test):
     return evaluation_metrics
 
 
-@task(log_prints=True, name='Model Registry')
+# @task(log_prints=True, name='Model Registry')
 def register_best_model(top_n: int) -> ModelVersion:
     '''
     Registers the best model and manages its production stage based on the lowest RMSE.
@@ -346,11 +346,11 @@ def register_best_model(top_n: int) -> ModelVersion:
     return best_run
 
 
-@Flow
+# @Flow
 def main_flow(
         zip_file: str = './data/ds_sal.zip',
         file_name: str = 'ds_salaries.csv',
-        num_trials: int = 50) -> None:   #change to the number of runs
+        num_trials: int = 20) -> None:   #change to the number of runs
     """
     The main training pipeline.
 
