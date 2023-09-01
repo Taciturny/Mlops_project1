@@ -70,7 +70,7 @@ Mlops_projectdtc/
 ├── monitoring/                # Directory for monitoring related files
 │   ├── baseline_model.ipynb
 │   ├── evidently_metrics.py
-│   └── README.md              # Documentation related to monitoring
+│   └── .....
 │
 ├── tests/              # Directory for testing related files
 │   ├── interation_test
