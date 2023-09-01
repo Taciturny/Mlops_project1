@@ -198,14 +198,18 @@ sam local invoke PredictFunction -e event.json
 sam deploy --guided
 ```
 Here is how it should be
+
 ![sam-deploy](Project_archet/term1.png)
+
 
 6. Navigate to the Api Gateway on the console and get your API ID for the URL endpoint and use either terminale or postman:
 ![Postman](Project_archet/postman.png)
 
+
 ```bash
 curl -X POST https://<API_ID>.execute-api.us-east-1.amazonaws.com/dev/predict -H "Content-Type: application/json" -d @events/event.json
 ```
+
 8. Delete the stack after testing:
 ```bash
 aws cloudformation delete-stack --stack-name <your-stack-name>
