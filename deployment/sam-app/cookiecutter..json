@@ -1,0 +1,11 @@
+{
+    "api_path": "/predict_salary",
+    "architectures": {
+      "value": [
+        "x86_64"
+      ]
+    },
+    "_copy_without_render": [
+      ".gitignore"
+    ]
+  }
