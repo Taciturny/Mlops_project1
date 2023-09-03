@@ -3,7 +3,7 @@ name: CI and CD
 on:
   push:
     branches:
-      - develop
+      - stage
     paths:
       - 'deployment/sam-app/**'
       - 'deployment/web_flask/**'
