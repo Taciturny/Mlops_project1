@@ -33,8 +33,3 @@ warm_containers = "EAGER"
 
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
-
-# Add a new section for specifying the S3 bucket
-[default.deploy.s3]
-bucket = "sam-lambda1991"
-
