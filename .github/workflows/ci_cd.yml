@@ -13,7 +13,7 @@ env:
   # PROD_IMAGE_REPOSITORY: 502015294952.dkr.ecr.us-west-2.amazonaws.com/aws-sam-cli-managed-deploy-to-prod-pipeline-resources-imagerepository-qau90ddkdl0i
   # IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salarypredictionb144402d/predictfunction975a0b7frepo
   # --image-repository ${IMAGE_REPOSITORY} \
-  IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
+  # IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
   AWS_REGION: us-east-1
 
 jobs:
@@ -38,11 +38,11 @@ jobs:
       - name: Deploy Lambda Function
         run: |
           cd deployment/sam-app  
-          sam deploy --stack-name ${STACK_NAME} \
+          sam deploy --guided
+            --stack-name ${STACK_NAME} \
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
-            --image-repository ${IMAGE_REPOSITORY} \
             --no-fail-on-empty-changeset 
 
 
