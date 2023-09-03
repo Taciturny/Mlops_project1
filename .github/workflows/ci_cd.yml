@@ -10,7 +10,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   SAM_TEMPLATE: template.yaml
   STACK_NAME: salary-prediction
-  IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salarypredictionb144402d/predictfunction975a0b7frepo
+  # IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salarypredictionb144402d/predictfunction975a0b7frepo
   AWS_REGION: us-east-1
 
 jobs:
@@ -39,7 +39,6 @@ jobs:
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
-            --image-repository ${IMAGE_REPOSITORY} \
             --no-fail-on-empty-changeset 
 
 
