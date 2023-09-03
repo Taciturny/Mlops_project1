@@ -23,6 +23,7 @@ Resources:
       PackageType: Image
       Architectures:
         - x86_64
+      ImageUri: !Sub $690744128016.dkr.ecr.$us-east-1.amazonaws.com/sam-app-repo:latest
       Events:
         Predict:
           Type: Api
