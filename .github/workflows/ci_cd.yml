@@ -17,7 +17,7 @@ env:
   STACK_NAME: salary-prediction
   EXECUTION_ROLE: arn:aws:iam::502015294952:role/aws-sam-cli-managed-deploy-t-PipelineExecutionRole-17BZHMDOGJYAZ
   CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::502015294952:role/aws-sam-cli-managed-deplo-CloudFormationExecutionR-HD5BOLPLF2IU
-  # ARTIFACTS_BUCKET: sam-lambda1991
+  IMAGE_REPOSITORY: salarypredictionb144402d/predictfunction975a0b7frepo
   AWS_REGION: us-east-1
 
 jobs:
@@ -46,6 +46,7 @@ jobs:
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
+            --image-repository ${IMAGE_REPOSITORY} \
             --no-fail-on-empty-changeset \
             --role-arn ${CLOUDFORMATION_EXECUTION_ROLE}
 
