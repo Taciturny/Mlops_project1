@@ -34,8 +34,8 @@ jobs:
       - name: Deploy Lambda Function
         run: |
           cd deployment/sam-app  
-          sam deploy --resolve-image-repos \
-            --stack-name ${STACK_NAME} \
+          sam deploy --debug --resolve-image-repos --resolve-s3 \
+            --stack-name sam-app \
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
@@ -111,3 +111,13 @@ jobs:
         working-directory: tests/integration_test/
         run: |
           pytest tests/
+
+
+
+  # cd deployment/sam-app  
+  # sam deploy --resolve-image-repos \
+  #   --stack-name ${STACK_NAME} \
+  #   --template template.yaml \
+  #   --capabilities CAPABILITY_IAM \
+  #   --region ${AWS_REGION} \
+  #   --no-fail-on-empty-changeset 
