@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - stage
-    paths:
-      - 'deployment/sam-app/**'
-      - 'deployment/web_flask/**'
-      - 'tests/**'
+    # paths:
+    #   - 'deployment/sam-app/**'
+    #   - 'deployment/web_flask/**'
+    #   - 'tests/**'
 
 env:
   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
