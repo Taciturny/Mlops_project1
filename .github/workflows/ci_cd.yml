@@ -4,20 +4,12 @@ on:
   push:
     branches:
       - stage
-    # paths:
-    #   - 'deployment/sam-app/**'
-    #   - 'deployment/web_flask/**'
-    #   - 'tests/**'
-    # --s3-bucket ${ARTIFACTS_BUCKET} \
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   SAM_TEMPLATE: template.yaml
   STACK_NAME: salary-prediction
-  # EXECUTION_ROLE: arn:aws:iam::502015294952:role/aws-sam-cli-managed-deploy-t-PipelineExecutionRole-17BZHMDOGJYAZ
-  # CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::502015294952:role/aws-sam-cli-managed-deplo-CloudFormationExecutionR-HD5BOLPLF2IU
-  # --role-arn ${CLOUDFORMATION_EXECUTION_ROLE}
   IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salarypredictionb144402d/predictfunction975a0b7frepo
   AWS_REGION: us-east-1
 
