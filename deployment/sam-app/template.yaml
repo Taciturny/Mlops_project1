@@ -23,6 +23,7 @@ Resources:
       PackageType: Image
       Architectures:
         - x86_64
+      ImageUri: 690744128016.dkr.ecr.us-east-1.amazonaws.com/samapp7427b055/predictfunction975a0b7frepo
       Events:
         Predict:
           Type: Api
