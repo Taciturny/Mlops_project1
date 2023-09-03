@@ -1,0 +1,110 @@
+name: CI and CD
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'deployment/sam-app/**'
+      - 'deployment/web_flask/**'
+      - 'tests/**'
+
+env:
+  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  SAM_TEMPLATE: template.yaml
+  STACK_NAME: salary-prediction
+  EXECUTION_ROLE: arn:aws:iam::502015294952:role/aws-sam-cli-managed-deploy-t-PipelineExecutionRole-17BZHMDOGJYAZ
+  CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::502015294952:role/aws-sam-cli-managed-deplo-CloudFormationExecutionR-HD5BOLPLF2IU
+  ARTIFACTS_BUCKET: sam-lambda1991
+  AWS_REGION: us-east-1
+
+jobs:
+  lambda_apigateway:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and Validate Lambda Function
+        run: |
+          cd deployment/sam-app
+          sam build
+          sam validate
+
+      - name: Deploy Lambda Function
+        run: |
+          cd deployment/sam-app  
+          sam deploy --stack-name ${STACK_NAME} \
+            --template template.yaml \
+            --capabilities CAPABILITY_IAM \
+            --region ${AWS_REGION} \
+            --s3-bucket ${ARTIFACTS_BUCKET} \
+            --no-fail-on-empty-changeset \
+            --role-arn ${CLOUDFORMATION_EXECUTION_ROLE}
+
+  # flask_nginx:
+  #   runs-on: ubuntu-latest
+  #   needs: lambda_apigateway  
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: Install dependencies
+  #       working-directory: deployment/web_flask
+  #       run: |
+  #         pip install pipenv
+  #         pipenv install --dev
+
+  #     - name: Start Flask Application
+  #       run: |
+  #         docker-compose -f docker-compose.yml up -d
+  #         until docker-compose -f docker-compose.yml exec web curl -s -o /dev/null http://localhost:9696; do
+  #           echo "Waiting for Flask to start..."
+  #           sleep 5
+  #         done
+
+  #     - name: Run Tests
+  #       run: |
+  #         docker-compose -f docker-compose.yml exec web python test.py
+
+  #     - name: Publish Docker image to GitHub Container Registry
+  #       run: |
+  #         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  #         docker-compose -f deployment/docker-compose.yml push
+
+  #     - name: Deploy Flask App to EBS
+  #       run: |
+  #         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws configure set region us-east-1  
+  #         eb deploy Salary_prediction
+
+  # test:
+  #   runs-on: ubuntu-latest
+  #   needs: flask_nginx  
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up Python 3.9
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.9
+
+  #     - name: Install dependencies
+  #       working-directory: tests/
+  #       run: pip install pipenv && pipenv install pytest pylint --dev
+
+  #     - name: Run Unit tests
+  #       working-directory: tests/unit_test
+  #       run: pytest tests/
+
+  #     - name: Lint
+  #       working-directory: tests/integration_test
+  #       run: pylint tests/
+
+  #     - name: Integration Test
+  #       working-directory: tests/integration_test/
+  #       run: |
+  #         pytest tests/
