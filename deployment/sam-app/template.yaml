@@ -16,14 +16,13 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
-
+  # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
   PredictFunction:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
       Architectures:
         - x86_64
-      ImageUri: '690744128016.dkr.ecr.us-east-1.amazonaws.com/sam-app-repo:latest'
       Events:
         Predict:
           Type: Api

@@ -12,7 +12,7 @@ env:
   STACK_NAME: salary-prediction
   # PROD_IMAGE_REPOSITORY: 502015294952.dkr.ecr.us-west-2.amazonaws.com/aws-sam-cli-managed-deploy-to-prod-pipeline-resources-imagerepository-qau90ddkdl0i
   # IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salarypredictionb144402d/predictfunction975a0b7frepo
-  IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/sam-app-repo:latest
+  IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/samapp7427b055/predictfunction975a0b7frepo
   AWS_REGION: us-east-1
 
 jobs:
