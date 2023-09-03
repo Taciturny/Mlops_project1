@@ -23,7 +23,7 @@ Resources:
       PackageType: Image
       Architectures:
         - x86_64
-      ImageUri: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
+      # ImageUri: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
       Events:
         Predict:
           Type: Api
