@@ -38,7 +38,7 @@ jobs:
       - name: Deploy Lambda Function
         run: |
           cd deployment/sam-app  
-          sam deploy --guided
+          sam deploy --resolve-image-repos
             --stack-name ${STACK_NAME} \
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
