@@ -10,10 +10,6 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   SAM_TEMPLATE: template.yaml
   STACK_NAME: salary-prediction
-  # PROD_IMAGE_REPOSITORY: 502015294952.dkr.ecr.us-west-2.amazonaws.com/aws-sam-cli-managed-deploy-to-prod-pipeline-resources-imagerepository-qau90ddkdl0i
-  # IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salarypredictionb144402d/predictfunction975a0b7frepo
-  # --image-repository ${IMAGE_REPOSITORY} \
-  # IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
   AWS_REGION: us-east-1
 
 jobs:
@@ -44,6 +40,10 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
             --no-fail-on-empty-changeset 
+
+      - name: Delete Lambda Function
+        run: |
+          aws cloudformation delete-stack --stack-name sam-app
 
 
   flask_nginx:
