@@ -16,7 +16,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
-  # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
   PredictFunction:
     Type: AWS::Serverless::Function
     Properties:
