@@ -16,7 +16,7 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = false
 resolve_s3 = true
-resolve_image_repos = true
+resolve_image_repos = false
 s3_prefix = "sam-app"
 region = "us-east-1"
 disable_rollback = true
@@ -33,5 +33,3 @@ warm_containers = "EAGER"
 
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
-
-image_repositories = 690744128016.dkr.ecr.us-east-1.amazonaws.com/samapp7427b055/predictfunction975a0b7frepo
