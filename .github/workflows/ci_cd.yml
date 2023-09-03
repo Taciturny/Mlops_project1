@@ -43,68 +43,68 @@ jobs:
             --no-fail-on-empty-changeset \
             --role-arn ${CLOUDFORMATION_EXECUTION_ROLE}
 
-  # flask_nginx:
-  #   runs-on: ubuntu-latest
-  #   needs: lambda_apigateway  
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+  flask_nginx:
+    runs-on: ubuntu-latest
+    needs: lambda_apigateway  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #     - name: Install dependencies
-  #       working-directory: deployment/web_flask
-  #       run: |
-  #         pip install pipenv
-  #         pipenv install --dev
+      - name: Install dependencies
+        working-directory: deployment/web_flask
+        run: |
+          pip install pipenv
+          pipenv install --dev
 
-  #     - name: Start Flask Application
-  #       run: |
-  #         docker-compose -f docker-compose.yml up -d
-  #         until docker-compose -f docker-compose.yml exec web curl -s -o /dev/null http://localhost:9696; do
-  #           echo "Waiting for Flask to start..."
-  #           sleep 5
-  #         done
+      - name: Start Flask Application
+        run: |
+          docker-compose -f docker-compose.yml up -d
+          until docker-compose -f docker-compose.yml exec web curl -s -o /dev/null http://localhost:9696; do
+            echo "Waiting for Flask to start..."
+            sleep 5
+          done
 
-  #     - name: Run Tests
-  #       run: |
-  #         docker-compose -f docker-compose.yml exec web python test.py
+      - name: Run Tests
+        run: |
+          docker-compose -f docker-compose.yml exec web python test.py
 
-  #     - name: Publish Docker image to GitHub Container Registry
-  #       run: |
-  #         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-  #         docker-compose -f deployment/docker-compose.yml push
+      - name: Publish Docker image to GitHub Container Registry
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker-compose -f deployment/docker-compose.yml push
 
-  #     - name: Deploy Flask App to EBS
-  #       run: |
-  #         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws configure set region us-east-1  
-  #         eb deploy Salary_prediction
+      - name: Deploy Flask App to EBS
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region us-east-1  
+          eb deploy Salary_prediction
 
-  # test:
-  #   runs-on: ubuntu-latest
-  #   needs: flask_nginx  
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+  test:
+    runs-on: ubuntu-latest
+    needs: flask_nginx  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #     - name: Set up Python 3.9
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: 3.9
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
-  #     - name: Install dependencies
-  #       working-directory: tests/
-  #       run: pip install pipenv && pipenv install pytest pylint --dev
+      - name: Install dependencies
+        working-directory: tests/
+        run: pip install pipenv && pipenv install pytest pylint --dev
 
-  #     - name: Run Unit tests
-  #       working-directory: tests/unit_test
-  #       run: pytest tests/
+      - name: Run Unit tests
+        working-directory: tests/unit_test
+        run: pytest tests/
 
-  #     - name: Lint
-  #       working-directory: tests/integration_test
-  #       run: pylint tests/
+      - name: Lint
+        working-directory: tests/integration_test
+        run: pylint tests/
 
-  #     - name: Integration Test
-  #       working-directory: tests/integration_test/
-  #       run: |
-  #         pytest tests/
+      - name: Integration Test
+        working-directory: tests/integration_test/
+        run: |
+          pytest tests/
