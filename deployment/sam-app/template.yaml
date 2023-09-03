@@ -23,7 +23,6 @@ Resources:
       PackageType: Image
       Architectures:
         - x86_64
-      ImageUri: ds-salary-prediction.latest
       Events:
         Predict:
           Type: Api
