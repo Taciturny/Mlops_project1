@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - stage
-    paths:
-      - 'deployment/sam-app/**'
-      - 'deployment/web_flask/**'
-      - 'tests/**'
+    # paths:
+    #   - 'deployment/sam-app/**'
+    #   - 'deployment/web_flask/**'
+    #   - 'tests/**'
     # --s3-bucket ${ARTIFACTS_BUCKET} \
 
 env:
