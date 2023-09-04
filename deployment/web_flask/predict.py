@@ -1,8 +1,17 @@
+import os
 import mlflow
 from flask import Flask, request, jsonify, json
 from config import Config
 import logging
 import traceback
+
+
+# Access the GitHub Actions secrets as environment variables
+aws_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
+aws_secret_access_key = os.environ["AWS_SECRET_ACCESS_KEY"]
+aws_region = "us-east-1"
+
+
 
 
 # Set up logging configuration
