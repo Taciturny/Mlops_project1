@@ -33,3 +33,6 @@ warm_containers = "EAGER"
 
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
+
+[default.package.parameters]
+image_repository = salary_prediction.v1
