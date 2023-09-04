@@ -34,8 +34,8 @@ jobs:
       - name: Deploy Lambda Function
         run: |
           cd deployment/sam-app  
-          sam deploy --debug --resolve-image-repos 
-            --stack-name sam-app \
+          sam deploy --debug --stack-name sam-app \
+            --resolve-image-repos  \
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
