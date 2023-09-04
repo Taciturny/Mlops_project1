@@ -21,6 +21,7 @@ s3_prefix = "sam-app"
 region = "us-east-1"
 disable_rollback = true
 parameter_overrides = "Stage=\"dev\""
+image_repository = "salary_prediction.v1"
 
 [default.package.parameters]
 resolve_s3 = false
@@ -34,5 +35,4 @@ warm_containers = "EAGER"
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
 
-[default.package.parameters]
-image_repository = "salary_prediction.v1"
+

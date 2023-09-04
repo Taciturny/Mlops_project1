@@ -39,6 +39,7 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
             --no-fail-on-empty-changeset \
+            --config-env default \
             --resolve-image-repos  
           
 
