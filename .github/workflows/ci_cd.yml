@@ -33,8 +33,14 @@ jobs:
 
       - name: Run Unit tests
         working-directory: tests/unit_test
-        run: pytest tests/
-
+        run: |
+          # Activate the virtual environment created by pipenv
+          pipenv shell
+          # Ensure pytest is installed
+          pytest --version
+          # Run pytest
+          pytest tests/
+          
       - name: Lint
         working-directory: tests/integration_test
         run: pylint tests/
@@ -42,6 +48,7 @@ jobs:
       - name: Integration Test
         working-directory: tests/integration_test/
         run: pytest tests/
+  
 
   flask_nginx:
     runs-on: ubuntu-latest
@@ -58,7 +65,6 @@ jobs:
         working-directory: deployment/web_flask
         run: |
           pip install pipenv
-          pipenv install --dev
 
       - name: Start Flask Application
         run: |
@@ -66,6 +72,7 @@ jobs:
           until docker-compose -f docker-compose.yml exec web curl -s -o /dev/null http://localhost:9696; do
             echo "Waiting for Flask to start..."
             sleep 5
+            docker-compose -f docker-compose.yml logs  # Add this line to see container logs
           done
 
       - name: Run Tests
@@ -104,14 +111,15 @@ jobs:
 
       - name: Deploy Lambda Function
         run: |
-          cd deployment/sam-app  
-          sam deploy --debug --stack-name sam-app \
+          cd deployment/sam-app  --resolve-image-repos 
+          sam deploy --debug 
+            --stack-name sam-app \
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
             --no-fail-on-empty-changeset \
-            --config-env default \
-            --resolve-image-repos 
+            --config-env default 
+            
 
 
       - name: Delete Lambda Function
@@ -122,3 +130,4 @@ jobs:
 # --image-repository ${TESTING_IMAGE_REPOSITORY}
 # image_repository = "690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1" 
 # pipenv install pytest pylint --dev
+# pipenv install pipenv
