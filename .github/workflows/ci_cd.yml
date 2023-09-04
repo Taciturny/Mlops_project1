@@ -35,11 +35,11 @@ jobs:
         run: |
           cd deployment/sam-app  
           sam deploy --debug --stack-name sam-app \
-            --resolve-image-repos  \
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
-            --no-fail-on-empty-changeset
+            --no-fail-on-empty-changeset \
+            --resolve-image-repos  
           
 
       - name: Delete Lambda Function
