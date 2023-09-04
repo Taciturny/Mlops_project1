@@ -11,7 +11,7 @@ env:
   SAM_TEMPLATE: template.yaml
   STACK_NAME: sam-app
   AWS_REGION: us-east-1
-  TESTING_IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
+  # TESTING_IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
 
 jobs:
   test:
@@ -48,6 +48,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
 
       - name: Install dependencies
         working-directory: deployment/web_flask
@@ -114,4 +119,6 @@ jobs:
           aws cloudformation delete-stack --stack-name sam-app
 
 
-# --image-repository ${TESTING_IMAGE_REPOSITORY} 
+# --image-repository ${TESTING_IMAGE_REPOSITORY}
+# image_repository = "690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1" 
+# pipenv install pytest pylint --dev

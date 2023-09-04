@@ -16,12 +16,12 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = false
 resolve_s3 = true
-resolve_image_repos = false
+resolve_image_repos = true
 s3_prefix = "sam-app"
 region = "us-east-1"
 disable_rollback = true
 parameter_overrides = "Stage=\"dev\""
-image_repository = "690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1"
+
 
 [default.package.parameters]
 resolve_s3 = false
