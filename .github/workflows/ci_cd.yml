@@ -17,20 +17,24 @@ jobs:
   test:
     runs-on: ubuntu-latest 
     steps:
+      - name: Clear Cache
+        run: |
+          rm -rf $RUNNER_TOOL_CACHE
+  
       - name: Checkout code
         uses: actions/checkout@v2
-
+  
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-
+  
       - name: Install dependencies
         working-directory: tests/
         run: |
           pip install pipenv
           pipenv install pytest pylint --dev
-
+  
       - name: Run Unit tests
         working-directory: tests/unit_test
         run: |
@@ -39,7 +43,7 @@ jobs:
           # Ensure pytest is installed
           pytest --version
           # Run pytest
-          pytest tests/
+          pytest tests/ 
           
       - name: Lint
         working-directory: tests/integration_test
@@ -67,6 +71,7 @@ jobs:
           pip install pipenv
 
       - name: Start Flask Application
+        working-directory: deployment/web_flask
         run: |
           docker-compose -f docker-compose.yml up -d
           until docker-compose -f docker-compose.yml exec web curl -s -o /dev/null http://localhost:9696; do
@@ -76,6 +81,7 @@ jobs:
           done
 
       - name: Run Tests
+        working-directory: deployment/web_flask
         run: |
           docker-compose -f docker-compose.yml exec web python test.py
 
@@ -94,34 +100,36 @@ jobs:
   lambda_apigateway:
     runs-on: ubuntu-latest
     steps:
+      - name: Clear Cache
+        run: |
+          rm -rf $RUNNER_TOOL_CACHE
+  
       - name: Checkout code
         uses: actions/checkout@v2
-
+  
       - name: Configure AWS CLI
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set region ${{ env.AWS_REGION }} 
-
+  
       - name: Build and Validate Lambda Function
         run: |
           cd deployment/sam-app
           sam build
           sam validate
-
+  
       - name: Deploy Lambda Function
         run: |
-          cd deployment/sam-app  --resolve-image-repos 
-          sam deploy --debug 
+          cd deployment/sam-app  
+          sam deploy --debug --resolve-image-repos 
             --stack-name sam-app \
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
             --no-fail-on-empty-changeset \
             --config-env default 
-            
-
-
+          
       - name: Delete Lambda Function
         run: |
           aws cloudformation delete-stack --stack-name sam-app
