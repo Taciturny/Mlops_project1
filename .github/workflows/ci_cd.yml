@@ -11,6 +11,7 @@ env:
   SAM_TEMPLATE: template.yaml
   STACK_NAME: sam-app
   AWS_REGION: us-east-1
+  TESTING_IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
 
 jobs:
   lambda_apigateway:
