@@ -40,7 +40,7 @@ jobs:
             --region ${AWS_REGION} \
             --no-fail-on-empty-changeset \
             --config-env default 
-
+            --resolve-image-repos  
           
 
       - name: Delete Lambda Function
