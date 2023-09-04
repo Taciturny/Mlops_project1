@@ -70,6 +70,12 @@ jobs:
         run: |
           pip install pipenv
 
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ env.AWS_REGION }} 
+
       - name: Start Flask Application
         working-directory: deployment/web_flask
         run: |
@@ -122,13 +128,13 @@ jobs:
       - name: Deploy Lambda Function
         run: |
           cd deployment/sam-app  
-          sam deploy --debug --resolve-image-repos 
-            --stack-name sam-app \
+          sam deploy --debug --resolve-image-repos --stack-name sam-app          
             --template template.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${AWS_REGION} \
             --no-fail-on-empty-changeset \
-            --config-env default 
+            --config-env default \
+            --profile my-aws-profile
           
       - name: Delete Lambda Function
         run: |
