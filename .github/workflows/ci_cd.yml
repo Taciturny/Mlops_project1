@@ -32,11 +32,12 @@ jobs:
       - name: Install dependencies
         working-directory: tests/
         run: |
-          pip install pipenv && pipenv install --dev
+          pip install pipenv 
   
       - name: Run Unit tests
         working-directory: tests/unit_test/tests
         run: |
+          pipenv install --dev
           # Run pytest
           pipenv run pytest model_test.py 
           
