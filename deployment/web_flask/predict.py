@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, json
 from config import Config
 import logging
 import traceback
+import boto3
 
 
 # Access the GitHub Actions secrets as environment variables
