@@ -32,24 +32,21 @@ jobs:
       - name: Install dependencies
         working-directory: tests/
         run: |
-          pip install pipenv
-          pipenv install pytest pylint --dev --skip-lock  # Add --non-interactive flag here
+          pip install pipenv && pipenv install --dev
   
       - name: Run Unit tests
         working-directory: tests/unit_test/tests
         run: |
-          # Activate the virtual environment created by pipenv
-          pytest --version
           # Run pytest
-          pytest model_test.py 
+          pipenv run pytest model_test.py 
           
       - name: Lint
         working-directory: tests/integration_test
-        run: pylint tests/
+        run: pipenv run pylint tests/
 
       - name: Integration Test
         working-directory: tests/integration_test/tests
-        run: pytest test_integration.py
+        run: pipenv run pytest test_integration.py
 
   
 
