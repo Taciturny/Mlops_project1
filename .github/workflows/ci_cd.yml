@@ -33,7 +33,7 @@ jobs:
         working-directory: tests/
         run: |
           pip install pipenv
-          pipenv install pytest pylint --dev
+          pipenv install pytest pylint --dev --skip-lock  # Add --non-interactive flag here
   
       - name: Run Unit tests
         working-directory: tests/unit_test/tests
@@ -50,6 +50,7 @@ jobs:
       - name: Integration Test
         working-directory: tests/integration_test/tests
         run: pytest test_integration.py
+
   
 
   # flask_nginx:
