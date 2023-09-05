@@ -39,8 +39,6 @@ jobs:
         working-directory: tests/unit_test/tests
         run: |
           # Activate the virtual environment created by pipenv
-          pipenv shell
-          # Ensure pytest is installed
           pytest --version
           # Run pytest
           pytest model_test.py 
