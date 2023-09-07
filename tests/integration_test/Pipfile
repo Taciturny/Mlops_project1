@@ -16,7 +16,6 @@ pytest = "*"
 pylint = "*"
 black = "*"
 isort = "*"
-boto3 = "*"
 
 [requires]
 python_version = "3.8"
