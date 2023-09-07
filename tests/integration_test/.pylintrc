@@ -1,18 +1,17 @@
-[MASTER]
-
 [MESSAGES CONTROL]
-disable =import-error,
+disable = [
+    "missing-function-docstring",
+    "missing-final-newline",
+    "missing-class-docstring",
+    "missing-module-docstring",
+    "invalid-name",
+    "too-few-public-methods",
+    "import-error",
+    "line-too-long",
+    "trailing-whitespace",
+    "trailing-newlines"
+]
 
-[REPORTS]
-
-[MISCELLANEOUS]
-
-[BASIC]
-
-[FORMAT]
-
-[SIMILARITIES]
-
-[TYPECHECK]
-
-[FILES]
+[pylint.plugins]
+load-plugins =
+    pylint_flask

@@ -1,12 +1,14 @@
-import mlflow
-from flask import Flask, request, jsonify, json
-from project.config import Config
 import logging
 import traceback
 
+import mlflow
+from flask import Flask, json, jsonify, request
+from project.config import Config
 
 # Set up logging configuration
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 app = Flask('Data Science-prediction')
 app.logger.setLevel(logging.INFO)  # Set the logging level
@@ -20,10 +22,14 @@ def home():
 def load_model_pipeline():
     if Config.MODEL_URI is None:
         raise ValueError("MODEL_URI environment variable not set")
+    # pylint: disable=redefined-outer-name
     model = mlflow.pyfunc.load_model(Config.MODEL_URI)
     return model
 
+
+# pylint: disable=redefined-outer-name
 model = load_model_pipeline()
+
 
 def predict(data):
     preds = model.predict(data)
@@ -49,21 +55,19 @@ def predict_endpoint():
 
         run_id = Config.get_run_id()
 
-        result = {
-            'salary_in_usd': formatted_pred,
-            'model_version': run_id
-        }
+        result = {'salary_in_usd': formatted_pred, 'model_version': run_id}
 
-        return jsonify(result)
+        # pylint: disable=no-member
+        return jsonify(result) 
+    # pylint: disable=no-member
     except json.JSONDecodeError:
         app.logger.error('Invalid JSON data received')
-        return jsonify({'error': 'Invalid JSON data'}), 400
+        # pylint: disable=redefined-outer-name
+        return jsonify({'error': 'Invalid JSON data'}), 400 
     except Exception as e:
         app.logger.error(f'Error: {str(e)}')
         app.logger.error(traceback.format_exc())
         return jsonify({'error': 'An internal error occurred'}), 500
-
-
 
 
 if __name__ == "__main__":
