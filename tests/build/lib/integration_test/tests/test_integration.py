@@ -5,14 +5,13 @@ Integration tests for the Data Science Salary Predictor.
 import os
 import sys
 import json
-import pytest
 
+import pytest
 from project.predict import app
 from project.test_data import data
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_DIR)
-
 
 
 # Define it once at the module level, no need to redefine in functions
@@ -30,7 +29,6 @@ def client():
     """
     app.config['TESTING'] = True
     yield client
-
 
 
 def test_home_endpoint() -> None:
@@ -63,6 +61,7 @@ def test_invalid_json_data():
     assert response.status_code == 400
     assert "error" in response.json
 
+
 def test_missing_json_data():
     """
     Test handling of missing JSON data.
@@ -74,9 +73,12 @@ def test_missing_json_data():
     Returns:
         None
     """
-    response = client.post('/predict', data=json.dumps({}), content_type='application/json')
+    response = client.post(
+        '/predict', data=json.dumps({}), content_type='application/json'
+    )
     assert response.status_code == 400
     assert "error" in response.json
+
 
 def test_valid_prediction():
     """
@@ -95,6 +97,7 @@ def test_valid_prediction():
     assert "salary_in_usd" in response.json
     assert "model_version" in response.json
 
+
 def test_internal_error():
     """
     Test handling of internal server error.
@@ -110,6 +113,7 @@ def test_internal_error():
     assert response.status_code == 400
     assert "error" in response.json
 
+
 def test_single_model_version():
     """
     Test setting the MODEL_URI environment variable.
@@ -123,14 +127,12 @@ def test_single_model_version():
     """
     # Set the MODEL_URI environment variable to your S3 bucket path (your single model version)
     os.environ["MODEL_URI"] = (
-    "s3://artifactss31991/models/2/7baf08eb142744abb2a41e386fbab279/"
-    "artifacts/random_forest_model_v1"
-)
-
+        "s3://artifactss31991/models/2/7baf08eb142744abb2a41e386fbab279/"
+        "artifacts/random_forest_model_v1"
+    )
 
 
 if __name__ == "__main__":
     pytest.main()
-
 
     # client = app.test_client()

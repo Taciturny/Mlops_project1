@@ -1,7 +1,5 @@
 pyproject.toml
 integration_test/__init__.py
-integration_test/pytest_config.py
-integration_test/setup.py
 integration_test.egg-info/PKG-INFO
 integration_test.egg-info/SOURCES.txt
 integration_test.egg-info/dependency_links.txt

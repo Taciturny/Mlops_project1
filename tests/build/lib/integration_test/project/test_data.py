@@ -8,5 +8,5 @@ data = {
     "employee_residence": "US",
     "remote_ratio": 0,
     "company_location": "US",
-    "company_size": "Large"
+    "company_size": "Large",
 }
