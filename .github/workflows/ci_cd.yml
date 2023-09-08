@@ -46,14 +46,14 @@ jobs:
       - name: Run Unit tests
         working-directory: tests/unit_test/tests
         run: |
-          pipenv install --dev boto3
+          pipenv install --dev 
           # Run pytest
           pipenv run pytest model_test.py
 
       - name: Lint
         working-directory: tests/
         run: |
-          pipenv install --dev  boto3
+          pipenv install --dev 
           pipenv run pylint tests/
 
       - name: Integration Test
