@@ -1,17 +1,17 @@
 """
 Integration tests for the Data Science Salary Predictor.
 """
-
 import os
 import sys
 import json
-
 import pytest
+
+sys.path.append("..")  
+
 from project.predict import app
 from project.test_data import data
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, PROJECT_DIR)
+
 
 
 # Define it once at the module level, no need to redefine in functions

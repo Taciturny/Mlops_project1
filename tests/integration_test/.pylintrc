@@ -9,7 +9,8 @@ disable = [
     "import-error",
     "line-too-long",
     "trailing-whitespace",
-    "trailing-newlines"
+    "trailing-newlines",
+    "wrong-import-position"
 ]
 
 [pylint.plugins]

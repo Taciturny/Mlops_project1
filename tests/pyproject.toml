@@ -12,7 +12,9 @@ disable = [
     "logging-fstring-interpolation",
     "redefined-outer-name",
     "trailing-whitespace",
-    "unused-variable"
+    "unused-variable",
+    "no-member",
+    "wrong-import-position"
 ]
 
 [tool.black]
