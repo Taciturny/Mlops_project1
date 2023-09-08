@@ -20,35 +20,47 @@ jobs:
       - name: Clear Cache
         run: |
           rm -rf $RUNNER_TOOL_CACHE
-  
+
       - name: Checkout code
         uses: actions/checkout@v2
-  
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-  
+
+      - name: Update Pipenv
+        run: pip install --upgrade pipenv
+
+      - name: Cache Pipenv virtual environment
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pipenv
+          key: pipenv-${{ runner.os }}-${{ hashFiles('**/Pipfile.lock') }}
+
       - name: Install dependencies
         working-directory: tests/
         run: |
-          pip install pipenv 
-        
-  
+          pip install pipenv
+
       - name: Run Unit tests
         working-directory: tests/unit_test/tests
         run: |
-          pipenv install --dev 
+          pipenv install --dev boto3
           # Run pytest
-          pipenv run pytest model_test.py 
-          
+          pipenv run pytest model_test.py
+
       - name: Lint
         working-directory: tests/
-        run: pipenv install --dev && pipenv run pylint tests/
+        run: |
+          pipenv install --dev  boto3
+          pipenv run pylint tests/
 
       - name: Integration Test
         working-directory: tests/integration_test/tests
-        run: pipenv install --dev && pipenv run pytest test_integration.py
+        run: |
+          pipenv install --dev
+          pipenv run pytest test_integration.py
 
   
 
