@@ -6,7 +6,7 @@ import sys
 import json
 import pytest
 
-sys.path.append(".")  
+sys.path.append("..")  
 
 from project.predict import app
 from project.config import Config  
