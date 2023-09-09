@@ -57,10 +57,10 @@ jobs:
           pipenv run pylint tests/
 
       - name: Integration Test
-        working-directory: tests/integration_test/tests
+        working-directory: tests/integration_test/
         run: |
           pipenv install --dev
-          pipenv run pytest test_integration.py
+          pipenv run pytest tests/
 
   
 
