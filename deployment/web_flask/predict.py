@@ -12,7 +12,7 @@ MODEL_URI = 's3://artifactss31991/models/2/7baf08eb142744abb2a41e386fbab279/""ar
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 app = Flask('Data Science-prediction')
-app.logger.setLevel(logging.INFO)  # Set the logging level
+app.logger.setLevel(logging.INFO) 
 
 
 @app.route('/')
