@@ -13,7 +13,7 @@ logging.basicConfig(
 app = Flask('Data Science-prediction')
 app.logger.setLevel(logging.INFO)  # Set the logging level
 MODEL_URI = ('s3://artifactss31991/models/2/7baf08eb142744abb2a41e386fbab279/'
-             'artifacts/random_forest_model_v1/model.pkl')
+             'artifacts/random_forest_model_v1/')
 
 
 @app.route('/')
@@ -21,10 +21,10 @@ def home():
     return "Welcome to Data Science Salary Predictor"
 
 def load_model_pipeline():
-    if Config.MODEL_URI is None:
+    if MODEL_URI is None:
         raise ValueError("MODEL_URI environment variable not set")
     # pylint: disable=redefined-outer-name
-    model = mlflow.pyfunc.load_model(Config.MODEL_URI)
+    model = mlflow.pyfunc.load_model(MODEL_URI)
     return model
 
 

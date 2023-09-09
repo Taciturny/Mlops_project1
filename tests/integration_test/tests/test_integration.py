@@ -83,4 +83,3 @@ def test_single_model_version():
 if __name__ == "__main__":
     pytest.main()
 
-    # client = app.test_client()
