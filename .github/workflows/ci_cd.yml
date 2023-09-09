@@ -95,6 +95,8 @@ jobs:
             sleep 5
             docker-compose -f docker-compose.yml logs  
           done
+          docker-compose down
+          # python test.py 
         
 
       - name: Run Tests
