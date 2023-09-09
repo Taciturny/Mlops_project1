@@ -7,14 +7,7 @@ import traceback
 import boto3
 
 
-# Access the GitHub Actions secrets as environment variables
-# aws_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
-# aws_secret_access_key = os.environ["AWS_SECRET_ACCESS_KEY"]
-# aws_region = "us-east-1"
-
-
-
-
+MODEL_URI = 's3://artifactss31991/models/2/7baf08eb142744abb2a41e386fbab279/""artifacts/random_forest_model_v1'
 # Set up logging configuration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -28,7 +21,7 @@ def home():
 
 
 def load_model_pipeline():
-    if Config.MODEL_URI is None:
+    if MODEL_URI is None:
         raise ValueError("MODEL_URI environment variable not set")
     model = mlflow.pyfunc.load_model(Config.MODEL_URI)
     return model
