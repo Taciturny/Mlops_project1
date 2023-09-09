@@ -23,7 +23,7 @@ def home():
 def load_model_pipeline():
     if MODEL_URI is None:
         raise ValueError("MODEL_URI environment variable not set")
-    model = mlflow.pyfunc.load_model(Config.MODEL_URI)
+    model = mlflow.pyfunc.load_model(MODEL_URI)
     return model
 
 model = load_model_pipeline()
