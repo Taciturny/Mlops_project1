@@ -7,6 +7,7 @@ name = "pypi"
 scikit-learn = "==1.2.2"
 flask = "*"
 mlflow = "==2.3.1"
+jinja2 = "*"
 
 [dev-packages]
 requests = "*"
