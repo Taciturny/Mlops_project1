@@ -10,9 +10,9 @@ services:
     environment:
       - FLASK_ENV=development
       - RUN_ID=7baf08eb142744abb2a41e386fbab279
-      - MODEL_URI=s3://artifactss31991/2/7baf08eb142744abb2a41e386fbab279/artifacts/random_forest_model_v1
-      - AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY
+      - MODEL_URI=${{ secrets.MODEL_URI }} 
+      - AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} 
+      - AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} 
       - AWS_REGION=us-east-1
 
   nginx-server:
