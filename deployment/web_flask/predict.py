@@ -7,7 +7,7 @@ import traceback
 import boto3
 
 
-MODEL_URI = 's3://artifactss31991/models/2/7baf08eb142744abb2a41e386fbab279/""artifacts/random_forest_model_v1'
+MODEL_URI = 's3://artifactss31991/models/2/7baf08eb142744abb2a41e386fbab279/artifacts/random_forest_model_v1'
 # Set up logging configuration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
