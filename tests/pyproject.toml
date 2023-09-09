@@ -14,7 +14,8 @@ disable = [
     "trailing-whitespace",
     "unused-variable",
     "no-member",
-    "wrong-import-position"
+    "wrong-import-position",
+    "trailing-newlines"
 ]
 
 [tool.black]
