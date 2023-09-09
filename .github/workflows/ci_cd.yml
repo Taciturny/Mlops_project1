@@ -83,23 +83,18 @@ jobs:
         run: |
           pip install pipenv
 
-      - name: Configure AWS CLI
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region ${{ env.AWS_REGION }} 
-
       - name: Start Flask Application
         working-directory: deployment/web_flask
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region ${{ env.AWS_REGION }} 
+          export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          AWS_REGION=us-east-1
+          export AWS_SECRET_ACCESS_KEY="${{ secrets.MODEL_URI }}"
           docker-compose -f docker-compose.yml up -d
           until docker-compose -f docker-compose.yml exec web curl -s -o /dev/null http://localhost:9696; do
             echo "Waiting for Flask to start..."
             sleep 5
-            docker-compose -f docker-compose.yml logs  # Add this line to see container logs
+            docker-compose -f docker-compose.yml logs  
           done
 
       - name: Run Tests
