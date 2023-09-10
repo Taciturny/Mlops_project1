@@ -5,12 +5,12 @@ on:
     branches:
       - stage
 
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  SAM_TEMPLATE: template.yaml
-  STACK_NAME: sam-app
-  AWS_REGION: us-east-1
+# env:
+#   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#   SAM_TEMPLATE: template.yaml
+#   STACK_NAME: sam-app
+#   AWS_REGION: us-east-1
   # TESTING_IMAGE_REPOSITORY: 690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1
 
 jobs:
@@ -67,54 +67,51 @@ jobs:
 
   
 
-  flask_nginx:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # flask_nginx:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
+  #     - name: Set up Python 3.8
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.8
 
-      - name: Install dependencies
-        working-directory: deployment/web_flask
-        run: |
-          pip install pipenv
+  #     - name: Install dependencies
+  #       working-directory: deployment/web_flask
+  #       run: |
+  #         pip install pipenv
 
-      - name: Start Flask Application
-        working-directory: deployment/web_flask
-        run: |
-          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
-          echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
-          docker-compose -f docker-compose.yml up -d
-          until docker-compose -f docker-compose.yml exec web curl -s -o /dev/null http://localhost:9696; do
-            echo "Waiting for Flask to start..."
-            sleep 5
-            docker-compose -f docker-compose.yml logs  
-          done
-          docker-compose down
-          # python test.py 
+  #     - name: Start Flask Application
+  #       working-directory: deployment/web_flask
+  #       run: |
+  #         echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+  #         echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+  #         echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+  #         docker-compose -f docker-compose.yml up -d
+  #         docker-compose -f docker-compose.yml logs  
+  #         done
+  #         docker-compose down
+  #         # python test.py 
         
 
-      - name: Run Tests
-        working-directory: deployment/web_flask
-        run: |
-          docker-compose -f docker-compose.yml exec web python test.py
+  #     - name: Run Tests
+  #       working-directory: deployment/web_flask
+  #       run: |
+  #         docker-compose -f docker-compose.yml exec web python test.py
 
-      - name: Publish Docker image to GitHub Container Registry
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker-compose -f deployment/docker-compose.yml push
+  #     - name: Publish Docker image to GitHub Container Registry
+  #       run: |
+  #         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  #         docker-compose -f deployment/docker-compose.yml push
 
-      - name: Deploy Flask App to EBS
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region us-east-1
-          eb deploy Salary_prediction
+  #     - name: Deploy Flask App to EBS
+  #       run: |
+  #         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws configure set region us-east-1
+  #         eb deploy Salary_prediction
 
 
   # lambda_apigateway:
@@ -159,3 +156,83 @@ jobs:
 # image_repository = "690744128016.dkr.ecr.us-east-1.amazonaws.com/salary_prediction.v1" 
 # pipenv install pytest pylint --dev
 # pipenv install pipenv
+
+
+  # flask_nginx:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up Python 3.8
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.8
+
+  #     - name: Install dependencies
+  #       working-directory: deployment/web_flask
+  #       run: |
+  #         pip install pipenv
+
+  #     - name: Build and push Docker images
+  #       working-directory: deployment/web_flask
+  #       run: |
+  #         echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+  #         echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+  #         echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+  #         docker-compose -f docker-compose.yml up --build -d
+  #         echo "DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+  #         echo "DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV 
+
+  #     - name: Deploy to AWS Elastic Beanstalk
+  #       run: |
+  #         echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+  #         echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+  #         echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+  #         pip install awsebcli
+  #         eb init -r us-east-1 -p docker Salary_prediction  
+  #         eb deploy Salary_prediction
+  #       env:
+  #         EB_CLI_INSTALL_IGNORE_WARNINGS: true
+  #         EB_USE_COMPRESSION: true
+
+
+  flask_nginx:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-east-1
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        working-directory: deployment/web_flask
+        run: |
+          pip install pipenv
+
+      - name: Build and push Docker images
+        working-directory: deployment/web_flask
+        run: |
+          echo "DOCKER_USERNAME: $DOCKER_USERNAME" >> $GITHUB_ENV
+          echo "DOCKER_PASSWORD: $DOCKER_PASSWORD" >> $GITHUB_ENV
+          docker-compose -f docker-compose.yml up --build -d
+
+      - name: Create and Deploy to AWS Elastic Beanstalk
+        run: |
+          eb create Salary_prediction
+          eb init -r $AWS_REGION -p docker Salary_prediction
+          eb deploy Salary_prediction
+        env:
+          EB_CLI_INSTALL_IGNORE_WARNINGS: true
+          EB_USE_COMPRESSION: true
