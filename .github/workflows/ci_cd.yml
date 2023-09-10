@@ -38,12 +38,12 @@ jobs:
           docker-compose -f docker-compose.yml up --build -d
         
 
-      - name: Create and Deploy to AWS Elastic Beanstalk
-        run: |
-          pip install awsebcli
-          eb init -r $AWS_REGION -p docker Salary-prediction
-          eb create Salary-prediction
-          eb deploy Salary-prediction
-        env:
-          EB_CLI_INSTALL_IGNORE_WARNINGS: true
-          EB_USE_COMPRESSION: true
+      # - name: Create and Deploy to AWS Elastic Beanstalk
+      #   run: |
+      #     pip install awsebcli
+      #     eb init -r $AWS_REGION -p docker salary-prediction
+      #     eb create salary-prediction
+      #     eb deploy salary-prediction
+      #   env:
+      #     EB_CLI_INSTALL_IGNORE_WARNINGS: true
+      #     EB_USE_COMPRESSION: true
