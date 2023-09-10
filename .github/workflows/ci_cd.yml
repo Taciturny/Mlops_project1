@@ -40,6 +40,7 @@ jobs:
 
       - name: Create and Deploy to AWS Elastic Beanstalk
         run: |
+          pip install awsebcli
           eb create Salary_prediction
           eb init -r $AWS_REGION -p docker Salary_prediction
           eb deploy Salary_prediction
