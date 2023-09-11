@@ -45,7 +45,6 @@ jobs:
           echo "DOCKER_PASSWORD=$DOCKER_PASSWORD" >> $GITHUB_ENV
           docker-compose -f docker-compose.yml up --build -d 
 
-
       - name: Create and Deploy to AWS Elastic Beanstalk
         working-directory: deployment/web_flask
         run: |
@@ -56,3 +55,7 @@ jobs:
         env:
           EB_CLI_INSTALL_IGNORE_WARNINGS: true
           EB_USE_COMPRESSION: true
+
+      - name: Stop and remove Docker containers
+        working-directory: deployment/web_flask
+        run: docker-compose down
