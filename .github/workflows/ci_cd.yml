@@ -29,18 +29,15 @@ jobs:
         working-directory: deployment/web_flask
         run: |
           pip install pipenv
+          # Add additional dependency installation commands if needed
 
-      - name: Build Docker image
+      - name: Build and push Docker images
         working-directory: deployment/web_flask
         run: |
           export DOCKER_USERNAME=$DOCKER_USERNAME
           export DOCKER_PASSWORD=$DOCKER_PASSWORD
-          docker-compose -f docker-compose.yml build
-
-      - name: Push Docker image
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker push promisetacy/salary-prediction:latest
+          docker-compose -f docker-compose.yml up --build -d -t promisetacy/salary-prediction:latest
+        
 
       - name: Create and Deploy to AWS Elastic Beanstalk
         run: |
