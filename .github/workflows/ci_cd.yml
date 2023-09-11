@@ -5,16 +5,16 @@ on:
     branches:
       - stage
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: us-east-1
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
 jobs:
   flask_nginx:
     runs-on: ubuntu-latest
-
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: us-east-1
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -29,6 +29,7 @@ jobs:
         working-directory: deployment/web_flask
         run: |
           pip install pipenv
+          # Add additional dependency installation commands if needed
 
       - name: Build and push Docker images
         working-directory: deployment/web_flask
@@ -36,14 +37,22 @@ jobs:
           export DOCKER_USERNAME=$DOCKER_USERNAME
           export DOCKER_PASSWORD=$DOCKER_PASSWORD
           docker-compose -f docker-compose.yml up --build -d
-        
 
-      # - name: Create and Deploy to AWS Elastic Beanstalk
-      #   run: |
-      #     pip install awsebcli
-      #     eb init -r $AWS_REGION -p docker salary-prediction
-      #     eb create salary-prediction
-      #     eb deploy salary-prediction
-      #   env:
-      #     EB_CLI_INSTALL_IGNORE_WARNINGS: true
-      #     EB_USE_COMPRESSION: true
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push Docker image
+        run: |
+          docker push Promisetacy/salary-prediction:latest
+
+      - name: Create and Deploy to AWS Elastic Beanstalk
+        run: |
+          pipenv run eb init -r $AWS_REGION -p docker salary-prediction
+          eb create salary-prediction
+          pipenv run eb deploy salary-prediction
+        env:
+          EB_CLI_INSTALL_IGNORE_WARNINGS: true
+          EB_USE_COMPRESSION: true
