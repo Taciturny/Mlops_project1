@@ -47,6 +47,7 @@ jobs:
 
 
       - name: Create and Deploy to AWS Elastic Beanstalk
+        working-directory: deployment/web_flask
         run: |
           pipenv run eb init -r $AWS_REGION -p docker salary-prediction
           eb create salary-prediction
