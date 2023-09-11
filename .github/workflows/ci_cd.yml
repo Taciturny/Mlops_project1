@@ -11,6 +11,7 @@ env:
   AWS_REGION: us-east-1
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  MODEL_URI: ${{ secrets.MODEL_URI }}
 
 jobs:
   flask_nginx:
@@ -42,7 +43,7 @@ jobs:
         run: |
           echo "DOCKER_USERNAME: $DOCKER_USERNAME" >> $GITHUB_ENV
           echo "DOCKER_PASSWORD: $DOCKER_PASSWORD" >> $GITHUB_ENV
-          docker-compose -f docker-compose.yml up --build -d -t promisetacy/salary-prediction:latest
+          docker-compose -f docker-compose.yml up --build -d 
 
 
       - name: Create and Deploy to AWS Elastic Beanstalk
