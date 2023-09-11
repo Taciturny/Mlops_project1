@@ -16,6 +16,13 @@ jobs:
   flask_nginx:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-east-1
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,7 +36,6 @@ jobs:
         working-directory: deployment/web_flask
         run: |
           pip install pipenv
-          # Add additional dependency installation commands if needed
 
       - name: Build and push Docker images
         working-directory: deployment/web_flask
@@ -37,7 +43,7 @@ jobs:
           echo "DOCKER_USERNAME: $DOCKER_USERNAME" >> $GITHUB_ENV
           echo "DOCKER_PASSWORD: $DOCKER_PASSWORD" >> $GITHUB_ENV
           docker-compose -f docker-compose.yml up --build -d -t promisetacy/salary-prediction:latest
-        
+
 
       - name: Create and Deploy to AWS Elastic Beanstalk
         run: |
