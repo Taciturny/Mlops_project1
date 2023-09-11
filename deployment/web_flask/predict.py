@@ -1,15 +1,18 @@
+import os
 import mlflow
 from flask import Flask, request, jsonify, json
 from config import Config
 import logging
 import traceback
+import boto3
 
 
+MODEL_URI = 's3://artifactss31991/models/2/7baf08eb142744abb2a41e386fbab279/artifacts/random_forest_model_v1'
 # Set up logging configuration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 app = Flask('Data Science-prediction')
-app.logger.setLevel(logging.INFO)  # Set the logging level
+app.logger.setLevel(logging.INFO) 
 
 
 @app.route('/')
@@ -18,9 +21,9 @@ def home():
 
 
 def load_model_pipeline():
-    if Config.MODEL_URI is None:
+    if MODEL_URI is None:
         raise ValueError("MODEL_URI environment variable not set")
-    model = mlflow.pyfunc.load_model(Config.MODEL_URI)
+    model = mlflow.pyfunc.load_model(MODEL_URI)
     return model
 
 model = load_model_pipeline()

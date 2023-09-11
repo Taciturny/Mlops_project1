@@ -1,3 +1,28 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta:__legacy__"
+[tool.pylint.messages_control]
+
+disable = [
+    "missing-function-docstring",
+    "missing-final-newline",
+    "missing-class-docstring",
+    "missing-module-docstring",
+    "invalid-name",
+    "too-few-public-methods",
+    "import-error",
+    "broad-exception-caught",
+    "logging-fstring-interpolation",
+    "redefined-outer-name",
+    "trailing-whitespace",
+    "unused-variable",
+    "no-member",
+    "wrong-import-position",
+    "trailing-newlines"
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+skip-string-normalization = true
+
+[tool.isort]
+multi_line_output = 3
+length_sort = true

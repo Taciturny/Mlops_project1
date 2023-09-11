@@ -1,0 +1,61 @@
+name: CI and CD
+
+on:
+  push:
+    branches:
+      - stage
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: us-east-1
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  MODEL_URI: ${{ secrets.MODEL_URI }}
+
+jobs:
+  flask_nginx:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-east-1
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        working-directory: deployment/web_flask
+        run: |
+          pip install pipenv
+
+      - name: Build and push Docker images
+        working-directory: deployment/web_flask
+        run: |
+          echo "DOCKER_USERNAME=$DOCKER_USERNAME" >> $GITHUB_ENV
+          echo "DOCKER_PASSWORD=$DOCKER_PASSWORD" >> $GITHUB_ENV
+          docker-compose -f docker-compose.yml up --build -d 
+
+      - name: Create and Deploy to AWS Elastic Beanstalk
+        working-directory: deployment/web_flask
+        run: |
+          pip install awsebcli 
+          eb init -r $AWS_REGION -p docker salary-prediction
+          eb create salary-prediction
+          eb deploy salary-prediction
+        env:
+          EB_CLI_INSTALL_IGNORE_WARNINGS: true
+          EB_USE_COMPRESSION: true
+
+      - name: Stop and remove Docker containers
+        working-directory: deployment/web_flask
+        run: docker-compose down

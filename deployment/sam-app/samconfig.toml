@@ -14,13 +14,14 @@ lint = true
 
 [default.deploy.parameters]
 capabilities = "CAPABILITY_IAM"
-confirm_changeset = true
+confirm_changeset = false
 resolve_s3 = true
 resolve_image_repos = true
 s3_prefix = "sam-app"
 region = "us-east-1"
 disable_rollback = true
 parameter_overrides = "Stage=\"dev\""
+
 
 [default.package.parameters]
 resolve_s3 = false
@@ -34,7 +35,4 @@ warm_containers = "EAGER"
 [default.local_start_lambda.parameters]
 warm_containers = "EAGER"
 
-# Add a new section for specifying the S3 bucket
-[default.deploy.s3]
-bucket = "sam-lambda1991"
 
