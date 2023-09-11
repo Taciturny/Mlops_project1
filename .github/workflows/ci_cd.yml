@@ -40,7 +40,7 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push Promisetacy/salary-prediction:latest
+          docker push promisetacy/salary-prediction:latest
 
       - name: Create and Deploy to AWS Elastic Beanstalk
         run: |
